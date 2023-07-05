@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useQuery from "../../hooks/useQuery";
 import { servicesCourse } from "../../services/servicesCourse";
 import CourseComingItem from "./CourseComingItem";
 
-const HomeCourseComing = () => {
-  const { data, loading, error, refetch } = useQuery(() =>
-    servicesCourse.getCourses()
-  );
-  const courses = data?.courses || {};
+const HomeCourseComing = ({ commingCourses }) => {
+  const dataCourseComing = commingCourses?.courses || {};
+  useEffect(() => {
+    function courseComingList() {
+      let courseComingSlider = $("#coursecoming__slider");
+      courseComingSlider.flickity({
+        cellAlign: "left",
+        contain: true,
+        prevNextButtons: false,
+        pageDots: false,
+        dragThreshold: 0,
+        wrapAround: true,
+      });
+
+      $(".coursecoming .control .control__next").on("click", function (e) {
+        e.preventDefault();
+        courseComingSlider.flickity("next");
+      });
+      $(".coursecoming .control .control__prev").on("click", function (e) {
+        e.preventDefault();
+        courseComingSlider.flickity("previous");
+      });
+    }
+
+    if (dataCourseComing?.length > 0) {
+      courseComingList();
+    }
+  }, [dataCourseComing]);
 
   return (
     <section className="coursecoming --scpadding">
@@ -27,8 +50,8 @@ const HomeCourseComing = () => {
         </div>
       </div>
       <div className="coursecoming__list" id="coursecoming__slider">
-        {courses?.length > 0 &&
-          courses.map((course, index) => {
+        {dataCourseComing?.length > 0 &&
+          dataCourseComing.map((course, index) => {
             return <CourseComingItem key={course?.id || index} {...course} />;
           })}
       </div>

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { authService } from "../../services/authService";
 import { message } from "antd";
 import { LOCAL_STORAGE } from "../../contant/localStorage";
+import { orderService } from "../../services/orderService";
 
 const AuthenContext = createContext({});
 export const AuthenProvider = ({ children }) => {
@@ -13,7 +14,9 @@ export const AuthenProvider = ({ children }) => {
   useEffect(() => {
     const accessToken = localStorage.getItem(LOCAL_STORAGE.token);
     if (accessToken) {
-      onGetProfile(accessToken);
+      onGetProfile();
+      onGetCoursHistories();
+      onGetPayment();
     }
   }, []);
 
@@ -39,7 +42,9 @@ export const AuthenProvider = ({ children }) => {
       localStorage.setItem(LOCAL_STORAGE.refreshToken, refreshToken);
 
       if (!!token) {
-        onGetProfile(token);
+        onGetProfile();
+        onGetCoursHistories();
+        onGetPayment();
         message.success("Đăng nhập thành công");
 
         //Đóng modal
@@ -76,13 +81,15 @@ export const AuthenProvider = ({ children }) => {
     localStorage.removeItem(LOCAL_STORAGE.token);
     localStorage.removeItem(LOCAL_STORAGE.refreshToken);
     setProfileInfo({});
+    onGetCoursHistories([]);
+    onGetPayment([]);
     message.success("Đăng xuất thành công");
   };
 
   //Get profile
-  const onGetProfile = async (token) => {
+  const onGetProfile = async () => {
     try {
-      const profileRes = await authService.getProfile(token);
+      const profileRes = await authService.getProfile();
       console.log("ProfileRes:", profileRes?.data?.data);
       if (profileRes?.data?.data) {
         setProfileInfo(profileRes.data.data);
@@ -91,7 +98,23 @@ export const AuthenProvider = ({ children }) => {
       console.log("error: ", error);
     }
   };
-
+  const onGetCoursHistories = async () => {
+    const res = await orderService.getCourseHistory();
+    console.log("res", res);
+    if (res?.data?.data) {
+      const mapCourses = res?.data?.data?.orders;
+      console.log("mapCourse: ", mapCourses);
+      setCourseInfo(mapCourses ?? []);
+    }
+  };
+  const onGetPayment = async () => {
+    const res = await orderService.getPaymentHistories();
+    console.log("res", res);
+    if (res?.data?.data) {
+      const mapPayment = res?.data?.data?.orders;
+      setPaymentInfo(mapPayment ?? []);
+    }
+  };
   return (
     <AuthenContext.Provider
       value={{
@@ -109,6 +132,8 @@ export const AuthenProvider = ({ children }) => {
         onRegister,
         setRenderForm,
         onLogout,
+        onGetCoursHistories,
+        onGetPayment,
       }}
     >
       {children}

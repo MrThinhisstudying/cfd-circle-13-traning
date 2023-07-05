@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const RadioContext = createContext({
   selectedValue: "",
@@ -8,6 +8,10 @@ const RadioContext = createContext({
 // Component cha
 const Radio = ({ children, defaultValue, onChange, disabled, ...props }) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue]);
 
   const handleChange = (event) => {
     const value = event.target.value;

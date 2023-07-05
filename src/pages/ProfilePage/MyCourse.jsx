@@ -11,7 +11,7 @@ const MyCourse = () => {
       {hasCourseInfo && (
         <div className="courses__list">
           {courseInfo?.map((course) => (
-            <CourseItem key={course.id} {...course} />
+            <CourseItem key={course?.course.id} {...course?.course} />
           ))}
         </div>
       )}

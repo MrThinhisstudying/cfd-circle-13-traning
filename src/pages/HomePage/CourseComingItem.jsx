@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Roles } from "../../contant/roles";
 import { PATHS } from "../../contant/pathnames";
 
 const CourseComingItem = (props) => {
   const { slug, image, tags, name, title, teams } = props || {};
-  const teacherInfo = teams.find((member) =>
+  const teacherInfo = teams?.find((member) =>
     member.tags?.includes(Roles.Teacher)
   );
   return (

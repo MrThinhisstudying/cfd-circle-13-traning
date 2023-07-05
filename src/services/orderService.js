@@ -1,21 +1,15 @@
 import axios from "axios";
 import { BASE_URL } from "../contant/environments";
+import axiosInstance from "../utils/axiosInstance";
 
 export const orderService = {
-  getCourseHistory(token = "") {
-    return axios.get(`${BASE_URL}/orders/courses/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+  getCourseHistory() {
+    return axiosInstance.get(`/orders/courses/me`);
   },
-  getPaymentHistories(token = "") {
-    return axios.get(`${BASE_URL}/orders/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+  getPaymentHistories() {
+    return axiosInstance.get(`/orders/me`);
+  },
+  orderCourse(payload = {}) {
+    return axiosInstance.post(`/orders`, payload);
   },
 };

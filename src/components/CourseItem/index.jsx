@@ -6,7 +6,7 @@ import { formatCurrency } from "../../utils/format";
 
 const CourseItem = React.memo((props) => {
   const { slug, image, tags, name, title, teams, price } = props || {};
-  const teacherInfo = teams.find((member) =>
+  const teacherInfo = teams?.find((member) =>
     member.tags?.includes(Roles.Teacher)
   );
   return (

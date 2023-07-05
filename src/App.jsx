@@ -25,13 +25,14 @@ function App() {
           <Route path={PATHS.CONTACT} element={<ContactPage />}></Route>
           <Route path={PATHS.COURSES} element={<CoursePage />}></Route>
           <Route path={PATHS.COURSES_DETAIL} element={<CourseDetail />}></Route>
-          <Route
-            path={PATHS.COURSES_REGISTER}
-            element={<CourseOrder />}
-          ></Route>
+
           <Route path={PATHS.ABOUT} element={<AboutPage />}></Route>
           <Route path={PATHS.BLOG} element={<BlogPage />}></Route>
-          <Route element={<PrivateRoute redirecPath="/contact" />}>
+          <Route element={<PrivateRoute redirecPath={PATHS.HOME} />}>
+            <Route
+              path={PATHS.COURSES_REGISTER}
+              element={<CourseOrder />}
+            ></Route>
             <Route path={PATHS.PROFILE.INDEX} element={<ProfileLayout />}>
               <Route index element={<MyInfo />}></Route>
               <Route

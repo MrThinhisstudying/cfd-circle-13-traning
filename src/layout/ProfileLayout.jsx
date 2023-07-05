@@ -13,28 +13,6 @@ const ProfileLayout = () => {
 
   const { firstName, email, phone, website, introduce } = profileInfo || {};
 
-  const onGetCoursHistories = async () => {
-    const res = await orderService.getCourseHistory(accessToken);
-    console.log("res", res);
-    if (res?.data?.data) {
-      const mapCourses = res?.data?.data?.orders?.map((order) => order?.course);
-      setCourseInfo(mapCourses ?? []);
-    }
-  };
-  const onGetPayment = async () => {
-    const res = await orderService.getPaymentHistories(accessToken);
-    console.log("res", res);
-    if (res?.data?.data) {
-      const mapPayment = res?.data?.data?.orders;
-      setPaymentInfo(mapPayment ?? []);
-    }
-  };
-  useEffect(() => {
-    onGetCoursHistories();
-    onGetCoursHistories();
-    onGetPayment();
-  }, []);
-
   return (
     <main className="mainwrapper profilepage">
       <div className="container">

@@ -1,13 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useQuery from "../../hooks/useQuery";
 import { teamService } from "../../services/teamService";
 import TeamItem from "../../components/TeamItem";
 
-const HomeTeams = () => {
-  const { data, loading, error, refetch } = useQuery((query) =>
-    teamService.getTeam(query)
-  );
-  const Teachers = data?.teams || "";
+const HomeTeams = ({ teams = [], loading = true }) => {
+  const Teachers = teams?.teams || "";
+  useEffect(() => {
+    function teacherSlider() {
+      let courseComingSlider = $(
+        ".teacher .teacher__list .teacher__list-inner"
+      );
+      courseComingSlider.flickity({
+        cellAlign: "left",
+        contain: true,
+        prevNextButtons: false,
+        pageDots: false,
+        dragThreshold: 0,
+      });
+
+      $(".teacher .control .control__next").on("click", function (e) {
+        e.preventDefault();
+        courseComingSlider.flickity("next");
+      });
+      $(".teacher .control .control__prev").on("click", function (e) {
+        e.preventDefault();
+        courseComingSlider.flickity("previous");
+      });
+      courseComingSlider.flickity("resize");
+    }
+    if (Teachers?.length > 0) {
+      teacherSlider();
+    }
+  }, [teams]);
+
   return (
     <section className="teacher --scpadding">
       <div className="container">
